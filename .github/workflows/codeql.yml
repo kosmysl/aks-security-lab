@@ -5,7 +5,7 @@ on:
         branches:
             - main
     
-    puch:
+    push:
         branches:
             - main
 
@@ -30,4 +30,3 @@ jobs:
             - name: Perform CodeQL analysis
               uses: github/codeql-action/analyze@v3
 
-              
