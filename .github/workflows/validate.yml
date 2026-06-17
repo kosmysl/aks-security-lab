@@ -34,8 +34,7 @@ jobs:
                 test -d k8s/secure
                 test -d policies/azure-policy
                 test -d policies/gatekeeper-examples
-                test -d wrong_dir
-
+                
 
             - name: Validate required files
               run: |
