@@ -2,6 +2,9 @@ name: dev-environment-check
 
 on: 
     workflow_dispatch:
+    pull_request:
+        branches:
+            - main
 
 
 permissions:
@@ -29,6 +32,6 @@ jobs:
                 echo "Actor: $GITHUB_ACTOR"
                 echo "Run ID: $GITHUB_RUN_ID"
                 echo "Run Number: $GITHUB_RUN_NUMBER"
-                echo "version 3"
+               
 
                  
