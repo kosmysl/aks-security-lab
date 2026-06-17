@@ -1,0 +1,56 @@
+name: validate ONE
+
+on:
+    pull_request:
+        branches:
+            - main
+
+permissions:
+    contents: read
+
+jobs:
+    validate:
+        name: Validate repository baseline
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Show repository structure
+              run: | 
+                find . -maxdepth 4 -type f | sort
+
+            - name: Validate required directories
+              run: |
+                test -d .github/workflows
+                test -d app
+                test -d infra
+                test -d k8s
+                test -d policies
+                test -d docs
+                test -d k8s/base
+                test -d k8s/insecure
+                test -d k8s/secure
+                test -d policies/azure-policy
+                test -d policies/gatekeeper-examples
+                
+
+            - name: Validate required files
+              run: |
+                test -f README.md
+                test -f docs/runbook.md
+
+            - name: Check that on obvious Azure credential files exists
+              run: |
+                if find . -type f \( \
+                    -name '*azure*.json' -o \
+                    -name '*credential*.json' -o \
+                    -name '*credentials*.json' -o \
+                    -name '*secret*.json' -o \
+                    -name '*secrets*.json' -o \
+                    -name '*.publishsettings*' \
+                    \) | grep .; then
+                    echo "Found Azure credential files in the repository. Please remove them."
+                    exit 1
+                fi
