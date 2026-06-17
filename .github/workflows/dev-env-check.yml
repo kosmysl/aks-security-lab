@@ -29,6 +29,6 @@ jobs:
                 echo "Actor: $GITHUB_ACTOR"
                 echo "Run ID: $GITHUB_RUN_ID"
                 echo "Run Number: $GITHUB_RUN_NUMBER"
-                echo "version 3"
+               
 
                  
