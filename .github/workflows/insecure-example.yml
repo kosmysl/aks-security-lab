@@ -1,0 +1,27 @@
+name: insecure-example
+
+on:
+    pull_request:
+        branches:
+            - main
+
+
+permissions: write-all 
+
+jobs:
+    dangerous-job:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Create runner for insecure example
+              uses: actions/checkout@v6 
+              with:
+                ref: ${{ github.event.pull_request.head.sha }}
+
+            - name: Static checks
+              run: |
+                echo "Run safe static checks"
+                
+
+
+
