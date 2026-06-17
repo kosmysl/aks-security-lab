@@ -18,9 +18,10 @@ jobs:
               with:
                 ref: ${{ github.event.pull_request.head.sha }}
 
-            - name: Dangerous execution of PR-controlled code
+            - name: Static checks
               run: |
-                chmod +x ./scripts/pr-script.sh
-                ./scripts/pr-script.sh
+                echo "Run safe static checks"
+                
+
 
 
