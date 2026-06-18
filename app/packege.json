@@ -1,0 +1,12 @@
+{
+    "name": "demo-api",
+    "version": "1.0.0",
+    "description": "Demo API for AKS Security Lab",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js"
+    },
+    "dependencies": {
+        
+    }   
+}
