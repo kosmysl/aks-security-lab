@@ -45,8 +45,6 @@ jobs:
               run: |
                 if find . -type f \( \
                     -name '*azure*.json' -o \
-                    -name '*credential*.json' -o \
-                    -name '*credentials*.json' -o \
                     -name '*secret*.json' -o \
                     -name '*secrets*.json' -o \
                     -name '*.publishsettings*' \

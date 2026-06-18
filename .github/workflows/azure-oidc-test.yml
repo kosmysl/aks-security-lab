@@ -1,0 +1,63 @@
+name: azure-oidc-test
+
+on:
+    pull_request:
+        branches:
+            - main
+    
+    push:
+        branches:
+            - main
+
+permissions:
+    contents: read 
+
+jobs:
+    validate-oidc-test:
+        name: Validate OIDC test workflow
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v6
+
+            - name: Check OICD file exists
+              run: | 
+                test -f infra/identity/federated-credential-dev.json
+                echo "OIDC file exists: infra/identity/federated-credential-dev.json"
+
+            - name: Validate OIDC file content
+              run: |
+                cat infra/identity/federated-credential-dev.json
+
+
+    login:
+        name: Test Azure OIDC login
+        runs-on: ubuntu-latest
+        needs: 
+            - validate-oidc-test
+        
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' 
+
+        environment: dev
+
+        permissions:
+            id-token: write
+            contents: read
+            
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v6
+
+            - name: Login to Azure using OIDC
+              uses: azure/login@v2
+              with:
+                client-id: ${{ secrets.AZURE_CLIENT_ID }}
+                tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+                subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+            
+            - name: Show resorce group
+              run: |
+                az account show --name "${{ vars.AZURE_RESOURCE_GROUP}}" \
+                --query "{name:name, location:location, provisioningState:properties.provisioningState }" -o table
