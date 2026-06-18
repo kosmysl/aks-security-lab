@@ -1,0 +1,46 @@
+name: build-image
+
+on:
+  push:
+    branches: 
+        - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  IMAGE_NAME: demo-api
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        name: Build and Push Docker Image
+        environment: dev
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v6
+
+            - name: Log via OIDC to Azure
+              uses: azure/docker-login@v2
+              with:
+                client-id: ${{ vars.AZURE_CLIENT_ID }}
+                tenant-id: ${{ vars.AZURE_TENANT_ID }}
+                subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+            - name: Login to ACR
+              run: |
+                az acr login --name ${{ vars.ACR_NAME }}
+            
+            - name: Build Image
+              run: |
+                IMAGE="${{ vars.ACR_NAME }}.azurecr.io/${IMAGE_NAME}:${{github.sha}}"
+                docker build -t $IMAGE ./app
+            
+            - name: Push Image
+              run: |
+                IMAGE="${{ vars.ACR_NAME }}.azurecr.io/${IMAGE_NAME}:${{github.sha}}"
+                echo "Pushing image $IMAGE"
+                docker push $IMAGE
