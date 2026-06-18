@@ -1,0 +1,8 @@
+node_modules
+nmp=debug.log
+.git
+.github
+.gitignore
+Dockerfile
+.dockerignore
+*.md
