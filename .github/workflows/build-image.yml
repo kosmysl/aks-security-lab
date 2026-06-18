@@ -36,11 +36,11 @@ jobs:
             
             - name: Build Image
               run: |
-                IMAGE="${{ vars.ACR_NAME }}.azurecr.io/${IMAGE_NAME}:${{github.sha}}"
+                IMAGE="${{ vars.ACR_NAME }}/${IMAGE_NAME}:${{github.sha}}"
                 docker build -t $IMAGE ./app
             
             - name: Push Image
               run: |
-                IMAGE="${{ vars.ACR_NAME }}.azurecr.io/${IMAGE_NAME}:${{github.sha}}"
+                IMAGE="${{ vars.ACR_NAME }}/${IMAGE_NAME}:${{github.sha}}"
                 echo "Pushing image $IMAGE"
                 docker push $IMAGE
