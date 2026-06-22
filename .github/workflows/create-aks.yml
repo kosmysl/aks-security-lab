@@ -34,22 +34,8 @@ jobs:
                 az account show -o table
             
             - name: Creaate AKS cluster
-           #   run: |
-            #        echo rg: ${{ env.RESOURCE_GROUP }}
-             #       az aks create \
-              #          --resource-group ${{ env.RESOURCE_GROUP }} \
-               #         --name ${{ env.AKS_NAME }} \
-                #        --location ${{ env.LOCATION }} \
-                 #       --node-count 2 \
-                  #      --node-vm-size Standard_B2ms \
-                   #     --attach-acr ${{ vars.ACR_NAME }} \
-                    #    --enable-azure-rbac \
-                     #   --enable-addons monitoring,azure-policy \
-                      #  --network-plugin azure \
-                       # --network-plugin-mode overlay \
-                        #--generate-ssh-keys
-                run: |
-                    az aks create \
+              run: |
+                 az aks create \
                         --resource-group "$RESOURCE_GROUP" \
                         --name "$AKS_NAME" \
                         --location "$LOCATION" \
