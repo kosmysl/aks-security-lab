@@ -43,7 +43,6 @@ jobs:
                         --node-vm-size Standard_B2ms \
                         --enable-managed-identity \
                         --enable-azure-rbac \
-                        --enable-addons monitoring,azure-policy \
                         --network-plugin azure \
                         --network-plugin-mode overlay \
                         --generate-ssh-keys
