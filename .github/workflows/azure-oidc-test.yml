@@ -19,7 +19,7 @@ jobs:
 
         steps:
             - name: Checkout repository
-              uses: actions/checkout@v6
+              uses: actions/checkout@v7
 
             - name: Check OICD file exists
               run: | 
@@ -48,7 +48,7 @@ jobs:
 
         steps:
             - name: Checkout repository
-              uses: actions/checkout@v6
+              uses: actions/checkout@v7
 
             - name: Login to Azure using OIDC
               uses: azure/login@v2
