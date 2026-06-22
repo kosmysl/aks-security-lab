@@ -1,9 +1,6 @@
 name: create-aks
 
 on:
-  push:
-    branches: 
-        - main
   workflow_dispatch:
 
 permissions:
@@ -46,7 +43,7 @@ jobs:
                         --node-vm-size Standard_B2ms \
                         --attach-acr ${{ vars.ACR_NAME }} \
                         --enable-azure-rbac \
-                        --enable-addons monitoring, azure-policy \
+                        --enable-addons monitoring,azure-policy \
                         --network-plugin azure \
                         --network-plugin-mode overlay \
                         --generate-ssh-keys
