@@ -42,6 +42,7 @@ jobs:
                         --node-count 2 \
                         --node-vm-size Standard_B2ms \
                         --enable-managed-identity \
+                        --enable-aad \
                         --enable-azure-rbac \
                         --network-plugin azure \
                         --network-plugin-mode overlay \
