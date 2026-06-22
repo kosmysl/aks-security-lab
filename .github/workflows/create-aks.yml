@@ -42,7 +42,7 @@ jobs:
                         --node-count 2 \
                         --node-vm-size Standard_B2ms \
                         --enable-managed-identity \
-                        --attach-acr "${{ vars.ACR_NAME }}" \
+                        --attach-acr "${{ vars.ACR_NAME_SHORT }}" \
                         --enable-azure-rbac \
                         --enable-addons monitoring,azure-policy \
                         --network-plugin azure \
