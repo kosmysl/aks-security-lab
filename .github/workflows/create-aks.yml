@@ -41,9 +41,7 @@ jobs:
                   --name ${{ env.AKS_NAME }}\
                   --only-show-errors > /dev/null 2>&1; then
                       echo "AKS already exists. Skipping creation."
-                      exit 0
-                  fi
-
+                  else
                   az aks create \
                       --resource-group ${{ env.RESOURCE_GROUP }} \
                       --name ${{ env.AKS_NAME }} \
@@ -57,6 +55,7 @@ jobs:
                       --network-plugin-mode overlay \
                       --generate-ssh-keys \
                       --only-show-errors
+                  fi
             
             - name: Deploy Namespace
               run: |
