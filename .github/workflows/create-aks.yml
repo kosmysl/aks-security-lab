@@ -35,19 +35,25 @@ jobs:
             
             - name: Creaate AKS cluster
               run: |
-                 az aks create \
-                        --resource-group "$RESOURCE_GROUP" \
-                        --name "$AKS_NAME" \
-                        --location "$LOCATION" \
-                        --node-count 2 \
-                        --node-vm-size Standard_B2s_v2 \
-                        --enable-managed-identity \
-                        --enable-aad \
-                        --enable-azure-rbac \
-                        --network-plugin azure \
-                        --network-plugin-mode overlay \
-                        --generate-ssh-keys 
+                  if az aks show \
+                  --resource-group ${{ env.RESOURCE_GROUP }} \
+                  --name ${{ env.AKS_NAME }}\
+                  --only-show-errors > /dev/null 2>&1; then
+                      echo "AKS already exists. Skipping creation."
+                      exit 0
+                  fi
 
+                  az aks create \
+                      --resource-group ${{ env.RESOURCE_GROUP }} \
+                      --name ${{ env.AKS_NAME }} \
+                      --location ${{ env.LOCATION }} \
+                      --enable-managed-identity \
+                      --enable-aad \
+                      --enable-azure-rbac \
+                      --enable-private-cluster \
+                      --network-plugin azure \
+                      --node-count 1 \
+                      --generate-ssh-keys
                     
 
             - name: Show AKS  state
