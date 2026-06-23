@@ -1,0 +1,10 @@
+apiVErsion: v1
+kind: Namespace
+metadata:
+  name: demo
+  labels:
+    app.kubernetes.io/part-of: aks-sec-lab
+    environment: dev
+    owner: aks-security-lab
+
+    

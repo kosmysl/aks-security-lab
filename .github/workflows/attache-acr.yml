@@ -14,7 +14,7 @@ env:
 jobs:
     attache-acr:
         runs-on: ubuntu-latest
-        name: Attache ACR to AKS aks-sec-lab
+        name: 00 Attache ACR to AKS aks-sec-lab
         environment: dev
 
         steps:
