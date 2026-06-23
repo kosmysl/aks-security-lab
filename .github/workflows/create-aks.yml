@@ -57,6 +57,16 @@ jobs:
                       --only-show-errors
                   fi
             
+            - name: Configure kubectl for AKS
+              run: |
+                  az aks get-credentials \
+                      --resource-group ${{ env.RESOURCE_GROUP }} \
+                      --name ${{ env.AKS_NAME }} \
+                      --overwrite-existing 
+                  kubectl config current-context
+                  kubectl cluster-info
+
+
             - name: Deploy Namespace
               run: |
                   kubectl apply -f k8s/day-6/namespace.yml 
