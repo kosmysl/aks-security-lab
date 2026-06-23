@@ -14,7 +14,7 @@ env:
 jobs:
     enable-aks-addons:
         runs-on: ubuntu-latest
-        name: Enable AKS Addons
+        name: 00 Enable AKS Addons
         environment: dev    
 
         steps:

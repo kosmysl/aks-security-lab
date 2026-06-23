@@ -3,6 +3,7 @@ name: create-aks
 on:
   workflow_dispatch:
 
+
 permissions:
   contents: read
   id-token: write
@@ -15,7 +16,7 @@ env:
 jobs:
     create-aks:
         runs-on: ubuntu-latest
-        name: Create AKS Cluster
+        name: 00 Create AKS Cluster
         environment: dev
 
         steps:
@@ -56,7 +57,10 @@ jobs:
                       --network-plugin-mode overlay \
                       --generate-ssh-keys \
                       --only-show-errors
-                     
+            
+            - name: Deploy Namespace
+              run: |
+                  kubectl apply -f k8s/day-6/namespace.yml 
                     
 
             - name: Show AKS  state
