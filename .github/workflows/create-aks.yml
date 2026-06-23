@@ -47,13 +47,16 @@ jobs:
                       --resource-group ${{ env.RESOURCE_GROUP }} \
                       --name ${{ env.AKS_NAME }} \
                       --location ${{ env.LOCATION }} \
+                      --node-count 2 \
+                      --node-vm-size Standard_B2s_v2 \
                       --enable-managed-identity \
                       --enable-aad \
                       --enable-azure-rbac \
-                      --enable-private-cluster \
                       --network-plugin azure \
-                      --node-count 1 \
-                      --generate-ssh-keys
+                      --network-plugin-mode overlay \
+                      --generate-ssh-keys \
+                      --only-show-errors
+                     
                     
 
             - name: Show AKS  state
