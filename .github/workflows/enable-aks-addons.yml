@@ -1,0 +1,37 @@
+name: enable-aks-addons
+
+on: 
+    workflow_dispatch:
+        
+permissions:
+    contents: read
+    id-token: write
+
+env:
+    RESOURCE_GROUP: rg-aks-sec-lab
+    AKS_NAME: aks-sec-lab
+
+jobs:
+    enable-aks-addons:
+        runs-on: ubuntu-latest
+        name: Enable AKS Addons
+        environment: dev    
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v7
+
+            - name: Log via OIDC to Azure
+              uses: azure/login@v3
+              with:
+                client-id: ${{ vars.AZURE_CLIENT_ID }}
+                tenant-id: ${{ vars.AZURE_TENANT_ID }}
+                subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+            - name: Enable AKS Addons
+              run: |
+                  az aks addon enable \
+                      --resource-group ${{ env.RESOURCE_GROUP }} \
+                      --name ${{ env.AKS_NAME }} \
+                      --addon azure-policy \
+                      --only-show-errors
