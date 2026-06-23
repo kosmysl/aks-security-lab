@@ -46,11 +46,11 @@ jobs:
                         --enable-azure-rbac \
                         --network-plugin azure \
                         --network-plugin-mode overlay \
-                        --generate-ssh-keys
-                        --debug
+                        --generate-ssh-keys 
+
                     
 
-            - name: SHow AKS  state
+            - name: Show AKS  state
               run: |
                     az aks show \
                         --resource-group ${{ env.RESOURCE_GROUP }} \
