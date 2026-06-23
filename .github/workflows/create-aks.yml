@@ -69,7 +69,7 @@ jobs:
                       --overwrite-existing 
                   kubelogin convert-kubeconfig -l azurecli
                   kubectl config current-context
-                  kubectl cluster-info
+                  
 
 
             - name: Deploy Namespace
