@@ -57,12 +57,17 @@ jobs:
                       --only-show-errors
                   fi
             
+            - name: Install kubelogin
+              run: |
+                  az aks install-cli
+
             - name: Configure kubectl for AKS
               run: |
                   az aks get-credentials \
                       --resource-group ${{ env.RESOURCE_GROUP }} \
                       --name ${{ env.AKS_NAME }} \
                       --overwrite-existing 
+                  kubelogin convert-kubeconfig -l azurecli
                   kubectl config current-context
                   kubectl cluster-info
 
