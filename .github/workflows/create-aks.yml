@@ -61,7 +61,7 @@ jobs:
                     --location ${{ env.LOCATION }} \
                     --node-count ${{ env.NODE_COUNT }} \
                     --node-vm-size ${{ env.NODE_VM_SIZE}} \
-                    --enable-managed-identety \
+                    --enable-managed-identity \
                     --enable-aad \
                     --enable-azure-rbac \
                     --network-plugin azure \
