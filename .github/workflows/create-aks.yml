@@ -47,5 +47,5 @@ jobs:
 
             - name: Create AKS if doesn't exist
               run: |
-                a = ${{ steps.checks.outputs.aks_exists }}
+                a = "${{ steps.checks.outputs.aks_exists }}"
                 echo "that is result: $a" 
