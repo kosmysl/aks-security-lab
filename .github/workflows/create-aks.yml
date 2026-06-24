@@ -8,6 +8,10 @@ permissions:
   contents: read
   id-token: write
 
+concurrency:
+  group: aks-sec-lab
+  cancel-in-progress: false
+
 env:
   RESOURCE_GROUP: rg-aks-sec-lab
   LOCATION: polandcentral
@@ -16,7 +20,7 @@ env:
 jobs:
     create-aks:
         runs-on: ubuntu-latest
-        name: 00 Create AKS Cluster
+        name: Create AKS Cluster
         environment: dev
 
         steps:
@@ -30,55 +34,18 @@ jobs:
                 tenant-id: ${{ vars.AZURE_TENANT_ID }}
                 subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
 
-            - name: Verify Az context
+            - name: Conduct checks
+              id: checks
               run: |
-                az account show -o table
-            
-            - name: Creaate AKS cluster
-              run: |
-                  if az aks show \
-                  --resource-group ${{ env.RESOURCE_GROUP }} \
-                  --name ${{ env.AKS_NAME }}\
-                  --only-show-errors > /dev/null 2>&1; then
-                      echo "AKS already exists. Skipping creation."
-                  else
-                  az aks create \
-                      --resource-group ${{ env.RESOURCE_GROUP }} \
-                      --name ${{ env.AKS_NAME }} \
-                      --location ${{ env.LOCATION }} \
-                      --node-count 2 \
-                      --node-vm-size Standard_B2s_v2 \
-                      --enable-managed-identity \
-                      --enable-aad \
-                      --enable-azure-rbac \
-                      --network-plugin azure \
-                      --network-plugin-mode overlay \
-                      --generate-ssh-keys \
-                      --only-show-errors
-                  fi
-            
-            - name: Install kubelogin
-              run: |
-                  az aks install-cli
+                if az aks show \
+                    --resource-group ${{ env.RESOURCE_GROUP }} \
+                    --name ${{ env.AKS_NAME }}; then
+                  echo "aks_exists=true" >> $GITHUB_ENV
+                else
+                  echo "aks_exists=false" >> $GITHUB_ENV
+                fi
 
-            - name: Configure kubectl for AKS
+            - name: Create AKS if doesn't exist
               run: |
-                  az aks get-credentials \
-                      --resource-group ${{ env.RESOURCE_GROUP }} \
-                      --name ${{ env.AKS_NAME }} \
-                      --overwrite-existing 
-                  kubelogin convert-kubeconfig -l azurecli
-                  kubectl config current-context
-                  
-
-
-            - name: Deploy Namespace
-              run: |
-                  kubectl apply -f k8s/day-6/namespace.yml 
-                    
-
-            - name: Show AKS  state
-              run: |
-                    az aks show \
-                        --resource-group ${{ env.RESOURCE_GROUP }} \
-                        --name ${{ env.AKS_NAME }} 
+                a = ${{ steps.checks.outputs.aks_exists }}
+                echo "that is result: $a" 
