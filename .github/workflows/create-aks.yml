@@ -58,7 +58,7 @@ jobs:
                   az aks create \
                     --resource-group ${{ env.RESOURCE_GROUP }} \
                     --name ${{ env.AKS_NAME }} \
-                    --lacation ${{ env.LOCATION }} \
+                    --location ${{ env.LOCATION }} \
                     --node-count ${{ env.NODE_COUNT }} \
                     --node-vm-size ${{ env.NODE_VM_SIZE}} \
                     --enable-managed-identety \
