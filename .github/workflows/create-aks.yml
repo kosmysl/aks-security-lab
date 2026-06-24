@@ -47,5 +47,8 @@ jobs:
 
             - name: Create AKS if doesn't exist
               run: |
-                a="${{ steps.checks.outputs.aks_exists }}"
-                echo "that is result: $a" 
+                if [ "${{ steps.checks.outputs.aks_exists }}" = "true" ]; then
+                  echo "AKS exists. Step skiped"
+                else
+                  echo "AKS doesn't exist and be deployed"
+                fi
