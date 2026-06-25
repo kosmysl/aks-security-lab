@@ -93,7 +93,7 @@ jobs:
         run: |
           kubectl \
             --kubeconfig "$KUBECONFIG" \
-            get role  emo-api-reader \
+            get role  demo-api-reader \
             --namespace demo \
             --output yaml
 
