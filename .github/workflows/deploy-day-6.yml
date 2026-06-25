@@ -69,7 +69,7 @@ jobs:
       - name: Deploy Service Account
         run: |
           kubectl \
-            --kubeconfig "$KUBECONFIG" \ 
+            --kubeconfig "$KUBECONFIG" \
             apply -f k8s/day-6/serviceAccount.yml
 
                 
