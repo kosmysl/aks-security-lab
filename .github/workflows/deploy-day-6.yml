@@ -15,7 +15,6 @@ env:
   RESOURCE_GROUP: rg-aks-sec-lab
   LOCATION: polandcentral
   AKS_NAME: aks-sec-lab
-  KUBECONFIG: ${{ runner.temp }}/aks-kubeconfi
 
 jobs:
   deploy-day-6:
@@ -23,12 +22,17 @@ jobs:
     environment: dev
 
     steps:
+      - name: Set Env variables
+        run: |
+          echo "KUBECONFIG=${{ runner.temp }}/aks-kubeconfig" >> "$GITHUB_ENV"
+
       - name: Checkout code
         uses: azure/login@v3
         with:
           client-id: ${{ vars.AZURE_CLIENT_ID }}
           tenant-id: ${{ vars.AZURE_TENANT_ID }}
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
 
       - name: Install kubelogin
         run: |
