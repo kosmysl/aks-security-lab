@@ -94,3 +94,35 @@ jobs:
                       --name ${{ env.AKS_NAME }} \
                       --addon azure-policy \
                       --only-show-errors
+
+            - name: Ensure AKS Cluster Admin role for GitHub OIDC identity
+              shell: bash
+              run: |
+                SP_OBJECT_ID=$(az ad sp show \
+                  --id "${{ vars.AZURE_CLIENT_ID }}" \
+                  --query id \
+                  --output tsv)
+
+                ROLE_SCOPE=$(az group show \
+                    --name "$RESOURCE_GROUP" \
+                    --query id \
+                    --output tsv)
+
+                EXISTING_ASSIGNMENT=$(az role assignment list \
+                  --assignee-object-id "$SP_OBJECT_ID" \
+                  --scope "$ROLE_SCOPE" \
+                  --role "Azure Kubernetes Service RBAC Cluster Admin" \
+                  --query "length(@)" \
+                  --output tsv)
+
+                if [ "$EXISTING_ASSIGNMENT" = "0" ]; then
+                  echo "Assigning AKS RBAC Cluster Admin to GitHub OIDC identity."
+
+                  az role assignment create \
+                    --assignee-object-id "$SP_OBJECT_ID" \
+                    --assignee-principal-type ServicePrincipal \
+                    --role "Azure Kubernetes Service RBAC Cluster Admin" \
+                    --scope "$ROLE_SCOPE"
+                else
+                  echo "AKS RBAC Cluster Admin role assignment already exists."
+                fi
