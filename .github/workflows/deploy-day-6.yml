@@ -83,5 +83,20 @@ jobs:
             --namespace demo \
             --output yaml
 
+      - name: Deploy Role
+        run: |
+          kubectl \
+            --kubeconfig "$KUBECONFIG" \
+            apply -f k8s/day-6/role-demo-api-reader.yml
+
+      - name: Vrify Role
+        run: |
+          kubectl \
+            --kubeconfig "$KUBECONFIG" \
+            get role  emo-api-reader \
+            --namespace demo \
+            --output yaml
+
+
                 
 
