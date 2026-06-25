@@ -40,7 +40,7 @@ jobs:
               shell: bash
               run: |
                 az aks get-credentials \
-                    --resourece-group "${{ vars.AZURE_RESOURCE_GROUP }} \
+                    --resourece-group "${{ vars.AZURE_RESOURCE_GROUP }}" \
                     --name "${{ env.AKS_NAME }}" \
                     --file "${{ runner.temp }}/aks-kubeconfig" \
                     --overwrite-existing
