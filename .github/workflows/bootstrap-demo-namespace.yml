@@ -34,7 +34,23 @@ jobs:
 
             - name: Install kubelogin
               run: |
-                az aks install-cli
+                KUBELOGIN_VERSION="v0.2.19"
+
+                 curl -fsSL \
+                    "https://github.com/Azure/kubelogin/releases/download/${KUBELOGIN_VERSION}/kubelogin-linux-amd64.zip" \
+                    -o /tmp/kubelogin.zip
+
+                unzip -q /tmp/kubelogin.zip -d /tmp/kubelogin
+
+                sudo install \
+                    /tmp/kubelogin/bin/linux_amd64/kubelogin \
+                    /usr/local/bin/kubelogin
+
+                kubelogin --version
+
+
+
+
 
             - name: Configure kubectl for AKS
               shell: bash
