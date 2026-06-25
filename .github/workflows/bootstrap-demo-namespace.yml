@@ -74,5 +74,11 @@ jobs:
                 kubectl \
                     --kubeconfig "${{ runner.temp }}/aks-kubeconfig" \
                     apply -f k8s/day-6/namespace.yml
-            
+
+            - name: Verify demo namespace
+              run: |
+                kubectl \
+                    --kubeconfig "${{ runner.temp }}/aks-kubeconfig" \
+                    get namespace demo \
+                    --show-labels
                 
