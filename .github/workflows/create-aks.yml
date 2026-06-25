@@ -45,9 +45,6 @@ jobs:
                     --name ${{ env.AKS_NAME }}; then
                   echo "aks_exists=true" >> $GITHUB_OUTPUT
 
-
-
-
                 else
                   echo "aks_exists=false" >> $GITHUB_OUTPUT
                 fi
