@@ -68,5 +68,11 @@ jobs:
                 kubectl \
                     --kubeconfig "${{ runner.temp }}/aks-kubeconfig" \
                     config current-context
+
+            - name: Create demo namespace
+              run: |
+                kubectl \
+                    --kubeconfig "${{ runner.temp }}/aks-kubeconfig" \
+                    aaply -f k8s.day-6/namespace.yml
             
                 
