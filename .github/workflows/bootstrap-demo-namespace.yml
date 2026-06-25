@@ -39,4 +39,9 @@ jobs:
             - name: Configure kubectl for AKS
               shell: bash
               run: |
-                echo "OK"
+                az aks get-credentials \
+                    --resourece-group "${{ vars.AZURE_RESOURCE_GROUP }} \
+                    --name "${{ env.AKS_NAME }}" \
+                    --file "${{ runner.temp }}/aks-kubeconfig" \
+                    --overwrite-existing
+                
