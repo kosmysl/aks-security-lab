@@ -36,4 +36,7 @@ jobs:
               run: |
                 az aks install-cli
 
-            
+            - name: Configure kubectl for AKS
+              shell: bash
+              run: |
+                echo "OK"
