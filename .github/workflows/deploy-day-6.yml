@@ -70,6 +70,7 @@ jobs:
         run: |
           kubectl \
             --kubeconfig "$KUBECONFIG" \
+            ls -lh k8s/day-6/
             apply -f k8s/day-6/serviceAccount.yml
 
                 
