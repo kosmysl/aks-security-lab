@@ -80,8 +80,8 @@ jobs:
           kubectl \
             --kubeconfig "$KUBECONFIG" \
             get serviceaccount demo-api-sa \
-            --namespace demo
+            --namespace demo \
             --output yaml
-            
+
                 
 
