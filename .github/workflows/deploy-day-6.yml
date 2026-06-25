@@ -27,6 +27,9 @@ jobs:
           echo "KUBECONFIG=${{ runner.temp }}/aks-kubeconfig" >> "$GITHUB_ENV"
 
       - name: Checkout code
+        uses: actions/checkout@v7
+      
+      - name: Log via OIDC to Azure
         uses: azure/login@v3
         with:
           client-id: ${{ vars.AZURE_CLIENT_ID }}
@@ -68,16 +71,6 @@ jobs:
 
       - name: Deploy Service Account
         run: |
-         
-          echo "Current directory:"
-          pwd
-
-          echo "GitHub workspace:"
-          echo "$GITHUB_WORKSPACE"
-
-          echo "Repository files:"
-          find "$GITHUB_WORKSPACE" -maxdepth 4 -type f | sort
-
           kubectl \
             --kubeconfig "$KUBECONFIG" \
             apply -f k8s/day-6/serviceAccount.yml
