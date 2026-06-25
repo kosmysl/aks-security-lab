@@ -65,7 +65,7 @@ jobs:
                     --login  azurecli \
                     --kubeconfig "${{ runner.temp }}/aks-kubeconfig"
                     
-                kubectl \ 
+                kubectl \
                     --kubeconfig "${{ runner.temp }}/aks-kubeconfig" \
                     config current-context
             
