@@ -1,0 +1,26 @@
+name: bootstrap-demo-namespace.yml
+
+
+on:
+    workflow_dispatch:
+
+permissions:
+    contents: read
+    id-token: write
+
+concurrency:
+    group: aks-sec-lab
+    cancel-in-progress: false
+
+env:
+    NAMESPACE: demo
+    AKS_NAME: aks-sec-lab
+
+jobs:
+    bootstrap:
+        runs-on: ubuntu-latest
+        environment: dev
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v7
