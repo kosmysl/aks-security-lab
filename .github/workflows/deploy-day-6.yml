@@ -25,7 +25,6 @@ jobs:
       - name: Set Env variables
         run: |
           echo "KUBECONFIG=${{ runner.temp }}/aks-kubeconfig" >> "$GITHUB_ENV"
-          echo "kubeconfig var is: ${{ env.KUBECONFIG}}"
 
       - name: Checkout code
         uses: azure/login@v3
@@ -38,6 +37,8 @@ jobs:
       - name: Install kubelogin
         run: |
           KUBELOGIN_VERSION="v0.2.19"
+
+          echo "kubeconfig var is: $KUBECONFIG"
 
           curl -fsSL \
             "https://github.com/Azure/kubelogin/releases/download/${KUBELOGIN_VERSION}/kubelogin-linux-amd64.zip" \
