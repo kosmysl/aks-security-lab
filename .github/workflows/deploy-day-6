@@ -1,0 +1,66 @@
+name: deploy-day-6
+
+on:
+  worklow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: aks-sec-lab
+  cancel-in-progress: false
+
+env:
+  RESOURCE_GROUP: rg-aks-sec-lab
+  LOCATION: polandcentral
+  AKS_NAME: aks-sec-lab
+  KUBECONFIG: ${{ runner.temp }}/aks-kubeconfi
+
+jobs:
+  deploy-day-6:
+    runs-on: ubuntu-latest
+    environment: dev
+
+    steps:
+      - name: Checkout code
+        uses: azure/login@v3
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Install kubelogin
+        run: |
+          KUBELOGIN_VERSION="v0.2.19"
+
+          curl -fsSL \
+            "https://github.com/Azure/kubelogin/releases/download/${KUBELOGIN_VERSION}/kubelogin-linux-amd64.zip" \
+            -o /tmp/kubelogin.zip
+
+          unzip -q /tmp/kubelogin.zip -d /tmp/kubelogin
+
+          sudo install \
+            /tmp/kubelogin/bin/linux_amd64/kubelogin \
+            /usr/local/bin/kubelogin
+
+          kubelogin --version
+
+      - name: Configure kubctl for AKS
+        run: |
+          az aks get-credentials \
+            --resource-group "${{ vars.AZURE_RESOURCE_GROUP }}" \
+            --name "${{ env.AKS_NAME }}" \
+            -file "$KUBECONFIG" \
+            --overwrite-existing
+          
+          kubelogin convert-kubeconfig \
+            --login  azurecli \
+            --kubeconfig "$KUBECONFIG"
+
+          kubectl \
+            --kubeconfig "$KUBECONFIG" \
+             config current-context
+
+                
+

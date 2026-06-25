@@ -48,10 +48,6 @@ jobs:
 
                 kubelogin --version
 
-
-
-
-
             - name: Configure kubectl for AKS
               shell: bash
               run: |
