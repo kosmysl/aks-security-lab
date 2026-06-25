@@ -61,6 +61,6 @@ jobs:
                     --file "${{ runner.temp }}/aks-kubeconfig" \
                     --overwrite-existing
 
-                kubelogin convert-kubeconfig -l azurecle
+                kubelogin convert-kubeconfig -l azurecli
             
                 
