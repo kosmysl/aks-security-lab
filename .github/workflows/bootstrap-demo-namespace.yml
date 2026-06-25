@@ -62,5 +62,6 @@ jobs:
                     --overwrite-existing
 
                 kubelogin convert-kubeconfig -l azurecli
+                kubectl config current-context
             
                 
