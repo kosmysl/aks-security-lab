@@ -25,7 +25,7 @@ jobs:
       - name: Set Env variables
         run: |
           echo "KUBECONFIG=${{ runner.temp }}/aks-kubeconfig" >> "$GITHUB_ENV"
-          echo "kubeconfig var is: $KUBECONFIG"
+          echo "kubeconfig var is: ${{ env.KUBECONFIG}}"
 
       - name: Checkout code
         uses: azure/login@v3
