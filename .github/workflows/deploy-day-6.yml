@@ -68,11 +68,9 @@ jobs:
 
       - name: Deploy Service Account
         run: |
-          pwd
+         
           ls -lh
-          ls -lh k8s/day-6/
-          echo NEW
-          ls -lh
+
           kubectl \
             --kubeconfig "$KUBECONFIG" \
             apply -f k8s/day-6/serviceAccount.yml
