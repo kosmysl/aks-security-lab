@@ -89,3 +89,11 @@ jobs:
                       --name ${{ env.AKS_NAME }} \
                       --query "identityProfile.kubeletIdentity" \
                       --only-show-errors
+
+            - name: Enable AKS Addons
+              run: |
+                  az aks addon enable \
+                      --resource-group ${{ env.RESOURCE_GROUP }} \
+                      --name ${{ env.AKS_NAME }} \
+                      --addon azure-policy \
+                      --only-show-errors
