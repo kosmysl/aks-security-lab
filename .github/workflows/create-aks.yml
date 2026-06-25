@@ -44,6 +44,10 @@ jobs:
                     --resource-group ${{ env.RESOURCE_GROUP }} \
                     --name ${{ env.AKS_NAME }}; then
                   echo "aks_exists=true" >> $GITHUB_OUTPUT
+
+
+
+
                 else
                   echo "aks_exists=false" >> $GITHUB_OUTPUT
                 fi
@@ -70,3 +74,18 @@ jobs:
                     --only-show-errors
                 fi
             
+            - name: Attache ACR to AKS
+              run: |
+                  az aks update \
+                      --resource-group ${{ env.RESOURCE_GROUP }} \
+                      --name ${{ env.AKS_NAME }} \
+                      --attach-acr ${{ vars.ACR_NAME_SHORT }} \
+                      --only-show-errors
+
+            - name: Verify kublet identity
+              run: |
+                  az aks show \
+                      --resource-group ${{ env.RESOURCE_GROUP }} \
+                      --name ${{ env.AKS_NAME }} \
+                      --query "identityProfile.kubeletIdentity" \
+                      --only-show-errors
