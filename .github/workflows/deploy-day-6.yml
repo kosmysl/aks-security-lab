@@ -57,7 +57,7 @@ jobs:
           az aks get-credentials \
             --resource-group "${{ vars.AZURE_RESOURCE_GROUP }}" \
             --name "${{ env.AKS_NAME }}" \
-            -file "$KUBECONFIG" \
+            --file "$KUBECONFIG" \
             --overwrite-existing
           
           kubelogin convert-kubeconfig \
