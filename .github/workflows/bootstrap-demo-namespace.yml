@@ -61,7 +61,12 @@ jobs:
                     --file "${{ runner.temp }}/aks-kubeconfig" \
                     --overwrite-existing
 
-                kubelogin convert-kubeconfig -l azurecli
-                kubectl config current-context
+                kubelogin convert-kubeconfig \
+                    --login  azurecli \
+                    --kubeconfig "${{ runner.temp }}/aks-kubeconfig"
+                    
+                kubectl \ 
+                    --kubeconfig "${{ runner.temp }}/aks-kubeconfig" \
+                    config current-context
             
                 
