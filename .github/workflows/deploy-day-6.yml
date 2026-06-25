@@ -38,8 +38,6 @@ jobs:
         run: |
           KUBELOGIN_VERSION="v0.2.19"
 
-          echo "kubeconfig var is: $KUBECONFIG"
-
           curl -fsSL \
             "https://github.com/Azure/kubelogin/releases/download/${KUBELOGIN_VERSION}/kubelogin-linux-amd64.zip" \
             -o /tmp/kubelogin.zip
@@ -67,6 +65,12 @@ jobs:
           kubectl \
             --kubeconfig "$KUBECONFIG" \
              config current-context
+
+      - name: Deploy Service Account
+        run: |
+          kubectl \
+            --kubeconfig "$KUBECONFIG" \ 
+            apply -f k8s/day-6/serviceAccount.yml
 
                 
 
