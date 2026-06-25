@@ -75,5 +75,13 @@ jobs:
             --kubeconfig "$KUBECONFIG" \
             apply -f k8s/day-6/serviceAccount.yml
 
+      - name: Verify Service Account
+        run: |
+          kubectl \
+            --kubeconfig "$KUBECONFIG" \
+            get serviceaccount demo-api-sa \
+            --namespace demo
+            --output yaml
+            
                 
 
