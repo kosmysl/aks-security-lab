@@ -113,10 +113,12 @@ jobs:
                 
       - name: Verify ServiceAccount RBAC permissions
         run: |
-          echo "ConfigMap read permission:"
-          kubectl \
+          
+          read=$(kubectl \
             --kubeconfig "$KUBECONFIG" \
             auth can-i get configmaps \
             --as=system:serviceaccount:demo:demo-api-sa \
-            --namespace demo \
+            --namespace demo)
+
+            echo "ConfigMap read permission: $read"
 
