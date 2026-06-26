@@ -124,6 +124,17 @@ jobs:
             echo "Secrets read permission: no"
           fi
 
+          if kubectl \
+            --kubeconfig "$KUBECONFIG" \
+            auth can-i create pods \
+            --as=system:serviceaccount:demo:demo-api-sa \
+            --namespace demo
+          then
+            echo "Create pod permission: yes"
+          else
+            echo "Create pod permission: no"
+          fi
+
           read=$(kubectl \
             --kubeconfig "$KUBECONFIG" \
             auth can-i get configmaps \
