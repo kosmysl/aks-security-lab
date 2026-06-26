@@ -142,3 +142,10 @@ jobs:
             --namespace demo)
 
           echo "ConfigMaps read permission: $read"
+
+      - name: Deploy ConfigMap
+        run: |
+          kubectl \
+            --kubeconfig "$KUBECONFIG" \
+            apply -f k8s/day-6/Configmap-demo-api.yml
+            
