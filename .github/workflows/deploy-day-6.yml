@@ -113,13 +113,16 @@ jobs:
                 
       - name: Verify ServiceAccount RBAC permissions
         run: |
-          secrets=$(kubectl \
+          if kubectl \
             --kubeconfig "$KUBECONFIG" \
             auth can-i get secrets \
             --as=system:serviceaccount:demo:demo-api-sa \
-            --namespace demo)
-
-          echo "Secrets read permission: $secrets"
+            --namespace demo
+          then
+            echo "Secrets read permission: yes"
+          else
+            echo "Secrets read permission: no"
+          fi
 
           read=$(kubectl \
             --kubeconfig "$KUBECONFIG" \
