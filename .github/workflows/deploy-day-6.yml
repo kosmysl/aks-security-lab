@@ -107,7 +107,7 @@ jobs:
         run: |
           kubectl \
             --kubeconfig "$KUBECONFIG" \
-            get rorolebinding  demo-api-reader-binding \
+            get rolebinding  demo-api-reader-binding \
             --namespace demo \
             --output yaml        
                 
