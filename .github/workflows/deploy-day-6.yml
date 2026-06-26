@@ -120,5 +120,12 @@ jobs:
             --as=system:serviceaccount:demo:demo-api-sa \
             --namespace demo)
 
-            echo "ConfigMap read permission: $read"
+          echo "Secrets read permission: $read"
 
+          secrets=$(kubectl \
+            --kubeconfig "$KUBECONFIG" \
+            auth can-i get secrets \
+            --as=system:serviceaccount:demo:demo-api-sa \
+            --namespace demo)
+
+          echo "Secrets read permission: $secrets"
