@@ -97,6 +97,18 @@ jobs:
             --namespace demo \
             --output yaml
 
+      - name: Deploy RoleBinding
+        run: |
+          kubectl \
+            --kubeconfig "$KUBECONFIG" \
+            apply -f k8s/day-6/rolebinding-demo-api-reader.yml
 
+      - name: Verify RoleBinding
+        run: |
+          kubectl \
+            --kubeconfig "$KUBECONFIG" \
+            get rorolebinding  demo-api-reader-binding \
+            --namespace demo \
+            --output yaml        
                 
 
