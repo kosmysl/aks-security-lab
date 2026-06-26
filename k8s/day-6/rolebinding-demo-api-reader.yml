@@ -6,11 +6,11 @@ metadata:
 
 subjects:
   - kind: ServiceAccount
-    name: demo
+    name: demo-api-sa
     namespace: demo
 
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: demo-api-reader
-  
+
