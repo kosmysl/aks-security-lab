@@ -148,4 +148,11 @@ jobs:
           kubectl \
             --kubeconfig "$KUBECONFIG" \
             apply -f k8s/day-6/Configmap-demo-api.yml
-            
+
+      - name: Verify ConfigMap
+        run: |
+          kubectl \
+            --kubeconfig "$KUBECONFIG" \
+            get configmap  demo-api-config \
+            --namespace demo \
+            --output yaml             
