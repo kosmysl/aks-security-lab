@@ -41,6 +41,7 @@ jobs:
                     --resource-group "$RESOURCE_GROUP" \
                     --name "$AKS_NAME" \
                     --network-dataplane cilium \
+                    --network-policy cilium \
                     --only-show-errors
 
             - name: Verify Cillium Dataplane
