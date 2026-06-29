@@ -164,6 +164,7 @@ jobs:
             apply -f k8s/day-6/deployment-demo-api.yml
 
       - name: Wait for demo API rollout
+        if: always()
         run: |
           kubectl \
             --kubeconfig "$KUBECONFIG" \
