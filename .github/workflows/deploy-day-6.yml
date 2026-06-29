@@ -169,7 +169,7 @@ jobs:
             --kubeconfig "$KUBECONFIG" \
             rollout status deployment/demo-api \
             --namespace demo \
-            --timeout=180   
+            --timeout=180s   
 
       - name: Show demo API Pods
         run: |
