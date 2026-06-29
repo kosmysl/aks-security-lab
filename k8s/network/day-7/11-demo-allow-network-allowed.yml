@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-network-allowed-to-demo-api
+  namespace: demo
+spec:
+  podSelector:
+    matchLabels:
+      app: demo-api
+
+  policyTypes:
+    - Ingress
+  
+  ingress:
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: network-lab
+        podSelector:
+          matchLabels:
+            app: network-client
+            access: allowed
+      
+      ports:
+        - protocol: TCP
+          port: http
