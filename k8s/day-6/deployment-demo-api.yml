@@ -29,7 +29,7 @@ spec:
       
       containers:
         - name: demo-api
-          image: acrsecuritylab29791.azurecr.io/demo-api:63a65e8a09b62e5f4d952237212a7f4faf5b9780
+          image: acrsecuritylab29791.azurecr.io/demo-api@sha256:2c04b0a4b18c778e99c26041511bb2638ff923aeadaa5b6d9c66a0849a28d06f
 
           imagePullPolicy: IfNotPresent
 
