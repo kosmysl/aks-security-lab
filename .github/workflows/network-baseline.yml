@@ -111,3 +111,26 @@ jobs:
                 --namespace network-lab \
                 --show-labels \
             
+      - name: Verify baseline connectivity
+        run: |
+            set -Eeuo pipefail
+
+            TARGET_URL="http://demo-api.demo.svc.cluster.local"
+
+            echo "=== allowed client -> demo-api"
+            kubctl \
+                exec \
+                --namespace network-lab \
+                deployment/network-allowed \
+                -- \
+                wget -S -T 5 -t 1 -O - "$TARGET_URL"
+            echo
+
+            echo "=== denied client -> demo-api ==="
+            kubctl \
+                exec \
+                --namespace network-lab \
+                deployment/network-denied \
+                -- \
+                wget -S -T 5 -t 1 -O - "$TARGET_URL"
+            echo
