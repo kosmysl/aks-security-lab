@@ -32,7 +32,7 @@ jobs:
                 az aks show \
                     --resource-group "$RESOURCE_GROUP" \
                     --name "$AKS_NAME" \
-                    --query 'networkProfile'
+                    --query 'networkProfile' \
                     --output json
 
             - name: Enable Azure CNI Powered by Cilium
