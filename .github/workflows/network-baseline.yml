@@ -97,3 +97,17 @@ jobs:
                 rollout status deployment/network-denied \
                 --namespace network-lab \
                 --timeout=180s
+
+      - name: Show service endpoint and clients identities
+        run: | 
+            kubectl \
+                get endpointslice \
+                --namespace demo \
+                --selector kubernetes.io/service-name=demo-api \
+                --output yaml
+            
+            kubectl \
+                get pods \
+                --namespace network-lab \
+                --show-labels \
+            
