@@ -118,7 +118,7 @@ jobs:
             TARGET_URL="http://demo-api.demo.svc.cluster.local"
 
             echo "=== allowed client -> demo-api"
-            kubctl \
+            kubectl \
                 exec \
                 --namespace network-lab \
                 deployment/network-allowed \
@@ -127,7 +127,7 @@ jobs:
             echo
 
             echo "=== denied client -> demo-api ==="
-            kubctl \
+            kubectl \
                 exec \
                 --namespace network-lab \
                 deployment/network-denied \
