@@ -30,8 +30,8 @@ jobs:
             - name: Show AKS network Configuration
               run: |
                 az aks show \
-                --resource-group "$RESOURCE_GROUP"
-                --name "$AKS_NAME"
+                --resource-group "$RESOURCE_GROUP" \
+                --name "$AKS_NAME" \
                 --query '{
                 kubernetesVersion:kubernetesVersion
                 }' 
