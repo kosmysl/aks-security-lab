@@ -83,7 +83,7 @@ jobs:
             -f k8s/network/day-7/11-demo-allow-network-allowed.yml
 
           kubectl apply \
-            -f k8s/network/day-7/10-demo-default-deny-ingress.yml
+            -f k8s/network/day-7/10-demo-default-deny.yml
 
       - name: Show effective policy objects
         run: |
