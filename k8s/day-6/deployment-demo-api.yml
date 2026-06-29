@@ -45,7 +45,7 @@ spec:
           securityContext:
             privileged: false
             allowPrivilegeEscalation: false
-            readOnlyRootFileSysytem: true
+            readOnlyRootFileSystem: true
             capabilities:
               drop:
                 - ALL
