@@ -34,5 +34,5 @@ jobs:
                 --name "$AKS_NAME" \
                 --query '{
                 kubernetesVersion:kubernetesVersion
-                }' 
+                }' \
                 --output json
