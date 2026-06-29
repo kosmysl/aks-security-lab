@@ -1,0 +1,140 @@
+name: network-ingress-isolation
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "k8s/network/day-7/10-demo-default-deny.yml"
+      - "k8s/network/day-7/11-demo-allow-network-allowed.yml
+      - ".github/workflows/network-ingress0isolation.yml"
+
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: aks-dev-network-policy
+  cancel-in-progress: false
+
+env:
+  RESOURCE_GROUP: rg-aks-sec-lab
+  AKS_NAME: aks-sec-lab
+
+jobs:
+  isolate:
+    runs-on: ubuntu-latest
+    environment: dev
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Login to Azure via OIDC
+        uses: azure/login@v3
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Set temporary kubeconfig path
+        run: |
+          echo "KUBECONFIG=$RUNNER_TEMP/aks-kubeconfig" >> "$GITHUB_ENV"
+
+      - name: Install kubelogin
+        uses: azure/use-kubelogin@v1
+        with:
+          kubelogin-version: v0.2.19
+
+      - name: Get AKS credentials
+        run: |
+          az aks get-credentials \
+            --resource-group "$RESOURCE_GROUP" \
+            --name "$AKS_NAME" \
+            --file "$KUBECONFIG" \
+            --overwrite-existing
+
+      - name: Configure kubelogin
+        run: |
+          kubelogin convert-kubeconfig \
+            --kubeconfig "$KUBECONFIG" \
+            -l azurecli
+
+      - name: Ensure controlled test clients exist
+        run: |
+          kubectl apply \
+            -f k8s/network/day-7/00-network-lab-namespace.yml
+
+          kubectl apply \
+            -f k8s/network/day-7/01-network-clients.yml
+
+          kubectl rollout status deployment/network-allowed \
+            --namespace network-lab \
+            --timeout=180s
+
+          kubectl rollout status deployment/network-denied \
+            --namespace network-lab \
+            --timeout=180s
+
+      - name: Apply allow rule before default deny
+        run: |
+          kubectl apply \
+            -f k8s/network/day-7/11-demo-allow-network-allowed.yml
+
+          kubectl apply \
+            -f k8s/network/day-7/10-demo-default-deny-ingress.yml
+
+      - name: Show effective policy objects
+        run: |
+          kubectl get networkpolicy \
+            --namespace demo
+
+          kubectl describe networkpolicy \
+            --namespace demo \
+            default-deny-ingress
+
+          kubectl describe networkpolicy \
+            --namespace demo \
+            allow-network-allowed-to-demo-api
+
+      - name: Verify allowed client reaches demo-api
+        run: |
+          set -Eeuo pipefail
+
+          kubectl exec \
+            --namespace network-lab \
+            deployment/network-allowed \
+            -- \
+            wget -S -T 5 -t 1 -O - \
+            http://demo-api.demo.svc.cluster.local/
+
+      - name: Verify denied client is blocked
+        run: |
+          set -Eeuo pipefail
+
+          set +e
+          OUTPUT=$(
+            kubectl exec \
+              --namespace network-lab \
+              deployment/network-denied \
+              -- \
+              wget -S -T 5 -t 1 -O - \
+              http://demo-api.demo.svc.cluster.local/ \
+              2>&1
+          )
+          STATUS=$?
+          set -e
+
+          printf '%s\n' "$OUTPUT"
+
+          if [ "$STATUS" -eq 0 ]; then
+            echo "::error::network-denied unexpectedly reached demo-api"
+            exit 1
+          fi
+
+          echo "network-denied was blocked as expected; wget exit code: $STATUS"
+          
+          
+          
+          
