@@ -190,3 +190,25 @@ jobs:
             get events \
             --namespace demo \
             --sort-by=.metadata.creationTimestamp   
+      
+      - name: Deploy demo API Service
+        run: |
+          kubectl \
+            --kubeconfig "$KUBECONFIG" \
+            apply -f k8s/day-6/service-demo-api.yml
+      
+      - name: Verify demo API Service
+        run: | 
+          kubectl \
+            --kubeconfig "$KUBECONFIG" \
+            get service demo-api \
+            --namespace demo \
+            --output yaml       
+
+      - name: Verify Service Endpoints
+        run: |
+          kubectl \
+            --kubeconfig "$KUBECONFIG" \
+            get endpoints demo-api \
+            --namespace demo \
+            --output yaml    
