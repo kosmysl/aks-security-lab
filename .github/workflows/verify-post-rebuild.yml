@@ -1,0 +1,66 @@
+name: verify-post-rebuild
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  RESOURCE_GROUP: rg-aks-sec-lab
+  AKS_NAME: aks-sec-lab
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    environment: dev
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Login to Azure via OIDC
+        uses: azure/login@v3
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Show AKS network and add-on configuration
+        run: |
+          az aks show \
+            --resource-group "$RESOURCE_GROUP" \
+            --name "$AKS_NAME" \
+            --query '{
+              provisioningState: provisioningState,
+              kubernetesVersion: kubernetesVersion,
+              networkDataplane: networkProfile.networkDataplane,
+              networkPolicy: networkProfile.networkPolicy,
+              azurePolicyEnabled: addonProfiles.azurepolicy.enabled
+            }' \
+            --output json
+
+      - name: Get AKS credentials
+        run: |
+          az aks get-credentials \
+            --resource-group "$RESOURCE_GROUP" \
+            --name "$AKS_NAME" \
+            --overwrite-existing
+
+      - name: Verify cluster access
+        run: |
+          kubectl get nodes -o wide
+          kubectl get namespaces
+          kubectl get pods -A
+
+      - name: Verify Azure Policy resources
+        run: |
+          kubectl get pods -n kube-system
+          kubectl get pods -n gatekeeper-system || true
+          kubectl get constrainttemplates || true
+
+      - name: Verify demo application
+        run: |
+          kubectl get deployment -n demo || true
+          kubectl get pods -n demo -o wide || true
+          kubectl get service -n demo || true
