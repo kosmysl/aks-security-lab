@@ -31,7 +31,7 @@ spec:
         - name: demo-api
           image: acrsecuritylab29791.azurecr.io/demo-api:a314e69dfbaa7544bba02575392fcce82c67d4bb
 
-          imagepullPolicy: IfNotPresent
+          imagePullPolicy: IfNotPresent
 
           ports:
             - name: http
