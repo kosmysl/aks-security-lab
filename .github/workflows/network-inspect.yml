@@ -30,14 +30,31 @@ jobs:
             - name: Show AKS network Configuration
               run: |
                 az aks show \
-                --resource-group "$RESOURCE_GROUP" \
-                --name "$AKS_NAME" \
-                --query '{
-                kubernetesVersion:kubernetesVersion,
-                networkPlugin:networkProfile.networkPlugin,
-                networkPluginMode:networkProfile.networkPluginMode,
-                networkDataplane:networkProfile.networkDataplane,
-                networkPolicy:networkProfile.networkPolicy,
-                outboundType:networkProfile.outboundType,
-                privateCluster:apiServerAccessProfile.enablePrivateCluster}' \
-                --output json
+                    --resource-group "$RESOURCE_GROUP" \
+                    --name "$AKS_NAME" \
+                    --query '{
+                    kubernetesVersion:kubernetesVersion,
+                    networkPlugin:networkProfile.networkPlugin,
+                    networkPluginMode:networkProfile.networkPluginMode,
+                    networkDataplane:networkProfile.networkDataplane,
+                    networkPolicy:networkProfile.networkPolicy,
+                    outboundType:networkProfile.outboundType,
+                    privateCluster:apiServerAccessProfile.enablePrivateCluster
+                    provisioningState:provisioningState,
+                    sku:sku,
+                    networkProfile:networkProfile
+                    }' \
+                    --output json
+
+                az aks nodepool list \
+                    --resource-group "$RESOURCE_GROUP" \
+                    --cluster-name "$AKS_NAME" \
+                   --query '[].{
+                    name:name,
+                    mode:mode,
+                    osType:osType,
+                    orchestratorVersion:orchestratorVersion,
+                    vmSize:vmSize,
+                    count:count
+                    }' \
+                    --output table
