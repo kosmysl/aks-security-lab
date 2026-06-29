@@ -33,6 +33,11 @@ jobs:
                 --resource-group "$RESOURCE_GROUP" \
                 --name "$AKS_NAME" \
                 --query '{
-                kubernetesVersion:kubernetesVersion
-                }' \
+                kubernetesVersion:kubernetesVersion,
+                networkPlugin:networkProfile.networkPlugin,
+                networkPluginMode:networkProfile.networkPluginMode,
+                networkDataplane:networkProfile.networkDataplane,
+                networkPolicy:networkProfile.networkPolicy,
+                outboundType:networkProfile.outboundType,
+                privateCluster:apiServerAccessProfile.enablePrivateCluster}' \
                 --output json
