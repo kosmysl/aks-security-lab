@@ -1,0 +1,99 @@
+name: network-baseline
+
+on:
+    push:
+        branches:
+            - main
+        paths:
+            - "k8s/network/day-7/00-network-lab-namespace.yml"
+            - "k8s/network/day-7/01-network-clients.yml"
+            - ".github/workflows/network-baseline.yml"
+
+    workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: aks-sec-lab
+  cancel-in-progress: false
+
+env:
+  RESOURCE_GROUP: rg-aks-sec-lab
+  AKS_NAME: aks-sec-lab
+
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    environment: dev
+
+    steps:
+      - name: Set Env variables
+        run: |
+          echo "KUBECONFIG=${{ runner.temp }}/aks-kubeconfig" >> "$GITHUB_ENV"
+
+      - name: Checkout code
+        uses: actions/checkout@v7
+      
+      - name: Log via OIDC to Azure
+        uses: azure/login@v3
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+
+      - name: Install kubelogin
+        run: |
+          KUBELOGIN_VERSION="v0.2.19"
+
+          curl -fsSL \
+            "https://github.com/Azure/kubelogin/releases/download/${KUBELOGIN_VERSION}/kubelogin-linux-amd64.zip" \
+            -o /tmp/kubelogin.zip
+
+          unzip -q /tmp/kubelogin.zip -d /tmp/kubelogin
+
+          sudo install \
+            /tmp/kubelogin/bin/linux_amd64/kubelogin \
+            /usr/local/bin/kubelogin
+
+          kubelogin --version
+
+      - name: Configure kubctl for AKS
+        run: |
+          az aks get-credentials \
+            --resource-group "${{ vars.AZURE_RESOURCE_GROUP }}" \
+            --name "${{ env.AKS_NAME }}" \
+            --file "$KUBECONFIG" \
+            --overwrite-existing
+          
+          kubelogin convert-kubeconfig \
+            --login  azurecli \
+            --kubeconfig "$KUBECONFIG"
+
+          kubectl \
+            --kubeconfig "$KUBECONFIG" \
+             config current-context
+    
+      - name: Deployed controled test clients
+        run: |
+          kubectl \
+            --kubeconfig "$KUBECONFIG" \
+            apply -f k8s/network/day-7/00-network-lab-namespace.yml
+
+          kubectl \
+            --kubeconfig "$KUBECONFIG" \
+            apply -f k8s/network/day-7/01-network-clients.yml
+
+      - name: Wait for test Client
+        run: |
+            kubectl \
+                rollout status deployment/network-allowed \
+                --namespace network-lab \
+                --timeout=180s
+
+            kubectl \
+                rollout status deployment/network-denied \
+                --namespace network-lab \
+                --timeout=180s
