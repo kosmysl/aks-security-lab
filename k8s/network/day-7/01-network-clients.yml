@@ -60,7 +60,7 @@ spec:
     metadata:
       labels:
         app: network-client
-        acess: denied
+        access: denied
     spec:
       automountServiceAccountToken: false
       securityContext:
