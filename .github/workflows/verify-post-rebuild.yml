@@ -30,7 +30,7 @@ jobs:
       - name: Set Env variables
         run: |
           echo "KUBECONFIG=${{ runner.temp }}/aks-kubeconfig" >> "$GITHUB_ENV"
-          
+
       - name: Show AKS network and add-on configuration
         run: |
           az aks show \
@@ -50,22 +50,52 @@ jobs:
           az aks get-credentials \
             --resource-group "$RESOURCE_GROUP" \
             --name "$AKS_NAME" \
+            --file "$KUBECONFIG"
             --overwrite-existing
+
+          kubelogin convert-kubeconfig \
+            --login  azurecli \
+            --kubeconfig "$KUBECONFIG"
+
+          kubectl \
+            --kubeconfig "$KUBECONFIG" \
+             config current-context
 
       - name: Verify cluster access
         run: |
-          kubectl get nodes -o wide
-          kubectl get namespaces
-          kubectl get pods -A
+          kubectl get nodes -o wide \
+            --kubeconfig "$KUBECONFIG" 
+
+          kubectl get namespaces \
+            --kubeconfig "$KUBECONFIG" 
+          
+          kubectl get pods -A \
+            --kubeconfig "$KUBECONFIG" 
 
       - name: Verify Azure Policy resources
         run: |
-          kubectl get pods -n kube-system
-          kubectl get pods -n gatekeeper-system || true
-          kubectl get constrainttemplates || true
+          kubectl \
+            get pods -n kube-system \
+            --kubeconfig "$KUBECONFIG"
+          
+          kubectl \
+          --kubeconfig "$KUBECONFIG" \
+          get pods -n gatekeeper-system || true
+
+          kubectl \
+            get constrainttemplates || true \
+            --kubeconfig "$KUBECONFIG"
 
       - name: Verify demo application
         run: |
-          kubectl get deployment -n demo || true
-          kubectl get pods -n demo -o wide || true
-          kubectl get service -n demo || true
+          kubectl \
+            get deployment -n demo || true \
+            --kubeconfig "$KUBECONFIG"
+
+          kubectl \
+            get pods -n demo -o wide || true \
+            --kubeconfig "$KUBECONFIG"
+
+          kubectl \
+            get service -n demo || true \
+            --kubeconfig "$KUBECONFIG"
