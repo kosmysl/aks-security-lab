@@ -68,6 +68,8 @@ jobs:
                     --network-plugin azure \
                     --network-plugin-mode overlay \
                     --generate-ssh-keys \
+                    --network-dataplane cilium \
+                    --network-policy cilium \
                     --only-show-errors
                 fi
             
