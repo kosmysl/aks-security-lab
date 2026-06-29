@@ -10,6 +10,7 @@ permissions:
 env:
   RESOURCE_GROUP: rg-aks-sec-lab
   AKS_NAME: aks-sec-lab
+  KUBECONFIG: ${{ runner.temp }}/aks-kubeconfig
 
 jobs:
   verify:
