@@ -27,6 +27,10 @@ jobs:
           tenant-id: ${{ vars.AZURE_TENANT_ID }}
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
 
+      - name: Set Env variables
+        run: |
+          echo "KUBECONFIG=${{ runner.temp }}/aks-kubeconfig" >> "$GITHUB_ENV"
+          
       - name: Show AKS network and add-on configuration
         run: |
           az aks show \
