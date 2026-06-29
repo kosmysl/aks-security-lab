@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - "k8s/network/day-7/10-demo-default-deny.yml"
-      - "k8s/network/day-7/11-demo-allow-network-allowed.yml
+      - "k8s/network/day-7/11-demo-allow-network-allowed.yml"
       - ".github/workflows/network-ingress0isolation.yml"
 
   workflow_dispatch:
