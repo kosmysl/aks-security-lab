@@ -20,7 +20,7 @@ spec:
 
     spec:
       serviceAccountName: demo-api-sa
-      automountServiceAccount: false
+      automountServiceAccountToken: false
 
       securityContext:
         runAsNonRoot: true
