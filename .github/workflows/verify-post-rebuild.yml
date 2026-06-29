@@ -112,3 +112,18 @@ jobs:
           kubectl \
             get service -n demo || true \
             --kubeconfig "$KUBECONFIG"
+
+          kubectl get deployment \
+            --namespace demo \
+            --show-labels \
+            --kubeconfig "$KUBECONFIG"
+
+          kubectl get pods \
+            --namespace demo \
+            --show-labels \
+            --kubeconfig "$KUBECONFIG"
+
+          kubectl get service \
+            --namespace demo \
+            --output yaml \
+            --kubeconfig "$KUBECONFIG"
