@@ -173,6 +173,7 @@ jobs:
             --timeout=180s   
 
       - name: Show demo API Pods
+        if: always()
         run: |
           kubectl \
             --kubeconfig "$KUBECONFIG" \
@@ -182,6 +183,7 @@ jobs:
             --output wide
             
       - name: Show Deployment events
+        if: failure()
         run: |
           kubectl \
             --kubeconfig "$KUBECONFIG" \
