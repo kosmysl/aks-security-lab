@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-api
+  namespace: demo 
+  labels:
+    app: demo-api
+
+spec:
+  replicas: 2
+
+  selector: 
+    matchLabels:
+      app: demo-api
+      
+  template:
+    metadata:
+      labels:
+        app: demo-api
+
+    spec:
+      serviceAccountName: demo-api-sa
+      automountServiceAccount: false
+
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      
+      containers:
+        - name: demo-api
+          image: acrsecuritylab29791.azurecr.io/demo-api:a314e69dfbaa7544bba02575392fcce82c67d4bb
+
+          imagepullPolicy: IfNotPresent
+
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+
+          envFrom:
+            - configMapRef:
+                name: demo-api-config
+
+          securityContext:
+            privileged: false
+            allowPrivilegeEscalation: false
+            readOnlyRootFileSysytem: true
+            capabilities:
+              drop:
+                - ALL
+
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 128Mi
+
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+
+      volumes:
+        - name: tmp
+          emptyDir: {} 

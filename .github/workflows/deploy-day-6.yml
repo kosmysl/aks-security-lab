@@ -156,3 +156,34 @@ jobs:
             get configmap  demo-api-config \
             --namespace demo \
             --output yaml             
+
+      - name: Deploy hardened demo API
+        run: |
+          kubectl \
+            --kubeconfig "$KUBECONFIG" \
+            apply -f k8s/day-6/deployment-demo-api.yml
+
+      - name: Wait for demo API rollout
+        run: |
+          kubectl \
+            --kubeconfig "$KUBECONFIG" \
+            rollout status deployment/demo-api \
+            --namespace demo \
+            --timeout=180   
+
+      - name: Show demo API Pods
+        run: |
+          kubectl \
+            --kubeconfig "$KUBECONFIG" \
+            get pods \
+            --namespace demo \
+            --selector app=demo-api \
+            --output wide
+            
+      - name: Show Deployment events
+        run: |
+          kubectl \
+            --kubeconfig "$KUBECONFIG" \
+            get events \
+            --namespace demo \
+            --sort-by=.metadata.creationTimestamp   
